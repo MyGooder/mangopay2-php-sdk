@@ -192,7 +192,6 @@ class RestTool
             if (in_array(self::$_JSON_HEADER, $httpHeaders)) {
                 // FIXME This can also fail hard and is not checked.
                 $this->_requestData = json_encode($this->_requestData);
-                $this->logger->debug('RequestData JSON :' . print_r($this->_requestData, true));
                 if ($this->_root->Config->DebugMode) {
                     $logClass::Debug('RequestData JSON', $this->_requestData);
                 }
