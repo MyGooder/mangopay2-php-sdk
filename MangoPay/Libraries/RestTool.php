@@ -130,20 +130,19 @@ class RestTool
             $this->_requestData = "";
         }
         $logClass = $this->_root->Config->LogClass;
-        $this->logger->debug("New request");
+
         if ($this->_root->Config->DebugMode) {
             $logClass::Debug('++++++++++++++++++++++ New request ++++++++++++++++++++++', '');
         }
         $this->BuildRequest($urlMethod, $pagination, $additionalUrlParams, $idempotencyKey);
         $responseResult = $this->_root->getHttpClient()->Request($this);
-        $logClass = $this->_root->Config->LogClass;
-        $this->logger->debug('Response JSON : ' . print_r($responseResult->Body, true));
+
         if ($this->_root->Config->DebugMode) {
             $logClass::Debug('Response JSON', $responseResult->Body);
         }
         // FIXME This can fail hard.
         $response = json_decode($responseResult->Body);
-        $this->logger->debug('Decoded object : ' . print_r($response, true));
+        
         if ($this->_root->Config->DebugMode) {
             $logClass::Debug('Response object', $response);
         }
@@ -169,24 +168,23 @@ class RestTool
         $restUrl = $urlTool->GetRestUrl($urlMethod, $this->_authRequired, $pagination, $additionalUrlParams);
         $this->_requestUrl = $urlTool->GetFullUrl($restUrl);
         $logClass = $this->_root->Config->LogClass;
-        $this->logger->debug('FullUrl : ' . $this->_requestUrl);
+        
         if ($this->_root->Config->DebugMode) {
             $logClass::Debug('FullUrl', $this->_requestUrl);
         }
         if (!is_null($pagination)) {
             $this->_pagination = $pagination;
         }
-        $this->logger->debug('RequestType : ' . $this->_requestType);
+        
         if ($this->_root->Config->DebugMode) {
             $logClass::Debug('RequestType', $this->_requestType);
         }
         $httpHeaders = $this->GetHttpHeaders($idempotencyKey);
-        $this->logger->debug('HTTP Headers : ' . print_r($httpHeaders, true));
+        
         if ($this->_root->Config->DebugMode) {
             $logClass::Debug('HTTP Headers', $httpHeaders);
         }
         if (!is_null($this->_requestData)) {
-            $this->logger->debug('RequestData object :' . print_r($this->_requestData, true));
             if ($this->_root->Config->DebugMode) {
                 $logClass::Debug('RequestData object', $this->_requestData);
             }
@@ -209,7 +207,6 @@ class RestTool
     private function ReadResponseHeader($headers)
     {
         $logClass = $this->_root->Config->LogClass;
-        $this->logger->debug('Response headers :' . print_r($headers, true));
         if ($this->_root->Config->DebugMode) {
             $logClass::Debug('Response headers', print_r($headers, true));
         }
