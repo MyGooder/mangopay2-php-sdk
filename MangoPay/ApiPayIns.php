@@ -45,14 +45,14 @@ class ApiPayIns extends Libraries\ApiBase
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\FilterRefunds $filter Filtering object
      * @param \MangoPay\Sorting $sorting Sorting object
-     * @return array List of the PayIn's Refunds
+     * @return \MangoPay\Refund[] List of the PayIn's Refunds
      */
     public function GetRefunds($payInId, & $pagination = null, $filter = null, $sorting = null)
     {
         return $this->GetList('refunds_get_for_payin', $pagination, '\MangoPay\Refund', $payInId, $filter, $sorting);
     }
 
-        private function GetPaymentKey($payIn)
+    private function GetPaymentKey($payIn)
     {
         if (!isset($payIn->PaymentDetails) || !is_object($payIn->PaymentDetails)) {
             throw new Libraries\Exception('PaymentDetails is not defined or it is not object type');
@@ -72,4 +72,14 @@ class ApiPayIns extends Libraries\ApiBase
         return strtolower($className);
     }
 
+    /**
+     * Retrieves a more detailed view of details concerning
+     * the card used to process a Web payment.
+     * @param string $payInId ID of the PayIn to retrieve card details for
+     * @return \MangoPay\PayInWebExtendedView Object returned from API
+     */
+    public function GetExtendedCardView($payInId)
+    {
+        return $this->GetObject('get_extended_card_view', $payInId, '\MangoPay\PayInWebExtendedView');
+    }
 }

@@ -32,7 +32,7 @@ class ApiUsers extends Libraries\ApiBase
      * Get all users
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
-     * @return array Array with users
+     * @return UserLegal[]|UserNatural[] Array with users
      */
     public function GetAll(& $pagination = null, $sorting = null)
     {
@@ -49,8 +49,8 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get natural or legal user by ID
-     * @param int|GUID $userId User identifier
-     * @return UserLegal | UserNatural User object returned from API
+     * @param string $userId User identifier
+     * @return UserLegal|UserNatural User object returned from API
      */
     public function Get($userId)
     {
@@ -60,8 +60,8 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get natural user by ID
-     * @param int|GUID $userId User identifier
-     * @return UserLegal|UserNatural User object returned from API
+     * @param string $userId User identifier
+     * @return UserNatural User object returned from API
      */
     public function GetNatural($userId)
     {
@@ -71,8 +71,8 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get legal user by ID
-     * @param int|GUID $userId User identifier
-     * @return UserLegal|UserNatural User object returned from API
+     * @param string $userId User identifier
+     * @return UserLegal User object returned from API
      */
     public function GetLegal($userId)
     {
@@ -118,7 +118,7 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Create bank account for user
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param \MangoPay\BankAccount $bankAccount Entity of bank account object
      * @return \MangoPay\BankAccount Create bank account object
      */
@@ -130,20 +130,21 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get all bank accounts for user
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
+     * @param \MangoPay\FilterBankAccounts $filter Filtering object
      *
-     * @return array Array with bank account entities
+     * @return \MangoPay\BankAccount[] Array with bank account entities
      */
-    public function GetBankAccounts($userId, & $pagination = null, $sorting = null)
+    public function GetBankAccounts($userId, & $pagination = null, $sorting = null, $filter = null)
     {
-        return $this->GetList('users_allbankaccount', $pagination, 'MangoPay\BankAccount', $userId, null, $sorting);
+        return $this->GetList('users_allbankaccount', $pagination, 'MangoPay\BankAccount', $userId, $filter, $sorting);
     }
 
     /**
      * Get bank account for user
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param int $bankAccountId Bank account Id
      *
      * @return \MangoPay\BankAccount Entity of bank account object
@@ -155,7 +156,7 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Save a bank account
-     * @param int $userId
+     * @param string $userId
      * @param \MangoPay\BankAccount $bankAccount
      * @return \MangoPay\BankAccount Entity of bank account object
      */
@@ -166,7 +167,7 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get all wallets for user
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
      *
@@ -179,7 +180,7 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get all transactions for user
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\FilterTransactions $filter Object to filter data
      * @param \MangoPay\Sorting $sorting Object to sorting data
@@ -193,7 +194,7 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get all cards for user
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
      *
@@ -206,8 +207,9 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Create new KYC document
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param \MangoPay\KycDocument $kycDocument
+     * @param string $idempotencyKey Key for response replication
      * @return \MangoPay\KycDocument Document returned from API
      */
     public function CreateKycDocument($userId, $kycDocument, $idempotencyKey = null)
@@ -217,12 +219,12 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get all KYC documents for user
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
      * @param \MangoPay\FilterKycDocuments $filter Object to filter data
      *
-     * @return array Array with KYC documents entities
+     * @return \MangoPay\KycDocument[] Array with KYC documents entities
      */
     public function GetKycDocuments($userId, & $pagination = null, $sorting = null, $filter = null)
     {
@@ -231,7 +233,7 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get KYC document
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param string $kycDocumentId Document identifier
      * @return \MangoPay\KycDocument Document returned from API
      */
@@ -242,12 +244,12 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get all mandates for user
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\FilterTransactions $filter Object to filter data
      * @param \MangoPay\Sorting $sorting Object to sorting data
      *
-     * @return array Array with mandate entities
+     * @return \MangoPay\Mandate[] Array with mandate entities
      */
     public function GetMandates($userId, & $pagination = null, $filter = null, $sorting = null)
     {
@@ -256,13 +258,13 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Get mandates for user and bank account
-     * @param int $userId User Id
-     * @param int $bankAccountId Bank account Id
+     * @param string $userId User Id
+     * @param string $bankAccountId Bank account Id
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\FilterTransactions $filter Object to filter data
      * @param \MangoPay\Sorting $sorting Object to sorting data
      *
-     * @return array Array with mandate entities
+     * @return \MangoPay\Mandate[] Array with mandate entities
      */
     public function GetMandatesForBankAccount($userId, $bankAccountId, & $pagination = null, $filter = null, $sorting = null)
     {
@@ -271,7 +273,7 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Save KYC document
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param \MangoPay\KycDocument $kycDocument Document to save
      * @return \MangoPay\KycDocument Document returned from API
      */
@@ -282,32 +284,38 @@ class ApiUsers extends Libraries\ApiBase
 
     /**
      * Create page for Kyc document
-     * @param int $userId User Id
-     * @param int $kycDocumentId KYC Document Id
+     * @param string $userId User Id
+     * @param string $kycDocumentId KYC Document Id
      * @param \MangoPay\KycPage $kycPage KYC Page
+     * @return bool `true` if the upload was successful, `false` otherwise
      * @throws \MangoPay\Libraries\Exception
      */
     public function CreateKycPage($userId, $kycDocumentId, $kycPage, $idempotencyKey = null)
     {
+        $uploaded = false;
         try {
-            $this->CreateObject('kyc_page_create', $kycPage, null, $userId, $kycDocumentId, $idempotencyKey);
+            $response = $this->CreateObject('kyc_page_create', $kycPage, null, $userId, $kycDocumentId, $idempotencyKey);
+            $uploaded = true;
         } catch (\MangoPay\Libraries\ResponseException $exc) {
             if ($exc->getCode() != 204) {
                 throw $exc;
+            } else {
+                $uploaded = true;
             }
         }
+        return $uploaded;
     }
 
     /**
      * Create page for Kyc document from file
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @param int $kycDocumentId KYC Document Id
      * @param string $filePath File path
+     * @return bool `true` if the upload was successful, `false` otherwise
      * @throws \MangoPay\Libraries\Exception
      */
     public function CreateKycPageFromFile($userId, $kycDocumentId, $filePath, $idempotencyKey = null)
     {
-
         if (empty($filePath)) {
             throw new \MangoPay\Libraries\Exception('Path of file cannot be empty');
         }
@@ -323,12 +331,12 @@ class ApiUsers extends Libraries\ApiBase
             throw new \MangoPay\Libraries\Exception('Content of the file cannot be empty');
         }
 
-        $this->CreateKycPage($userId, $kycDocumentId, $kycPage, $idempotencyKey);
+        return $this->CreateKycPage($userId, $kycDocumentId, $kycPage, $idempotencyKey);
     }
 
     /**
      * Get user EMoney
-     * @param int $userId User Id
+     * @param string $userId User Id
      * @return \MangoPay\EMoney EMoney obhect returned from API
      */
     public function GetEMoney($userId)
@@ -353,7 +361,7 @@ class ApiUsers extends Libraries\ApiBase
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\FilterPreAuthorizations $filter Filtering object
      * @param \MangoPay\Sorting $sorting Sorting object
-     * @return array The user's PreAuthorizations
+     * @return \MangoPay\CardPreAuthorization[] The user's PreAuthorizations
      */
 
     public function GetPreAuthorizations($userId, $pagination = null, $filter = null, $sorting = null)

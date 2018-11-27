@@ -86,19 +86,20 @@ class ApiClients extends Libraries\ApiBase
      * for each currency set second $fundsType parameter.
      * 
      * @param \MangoPay\FundsType $fundsType FundsType enum
+     * @param \MangoPay\Sorting $sorting Sorting object
      *  
      * @return \MangoPay\Wallet[] List with your client wallets
      */
-    public function GetWallets($fundsType = null)
+    public function GetWallets($fundsType = null, $sorting = null)
     {
         $pagination = new \MangoPay\Pagination();
 
         if (is_null($fundsType)){
-            return $this->GetList('client_wallets', $pagination, '\MangoPay\Wallet');
+            return $this->GetList('client_wallets', $pagination, '\MangoPay\Wallet', null, null, $sorting);
         } else if ($fundsType == FundsType::FEES){
-            return $this->GetList('client_wallets_fees', $pagination, '\MangoPay\Wallet');
+            return $this->GetList('client_wallets_fees', $pagination, '\MangoPay\Wallet', null, null, $sorting);
         } else if ($fundsType == FundsType::CREDIT){
-            return $this->GetList('client_wallets_credit', $pagination, '\MangoPay\Wallet');
+            return $this->GetList('client_wallets_credit', $pagination, '\MangoPay\Wallet', null, null, $sorting);
         }
         
         throw new \MangoPay\Libraries\Exception('\MangoPay\FundsType object has wrong value and cannot get wallets'); 
@@ -109,8 +110,8 @@ class ApiClients extends Libraries\ApiBase
      * 
      * @param \MangoPay\FundsType $fundsType FundsType enum
      * @param \MangoPay\CurrencyIso $currencyIso CurrencyIso enum
-     * 
-     * @return \MangoPay\Wallet Wallets (fees or credit) with a particular currency
+     *
+     * @return \MangoPay\Wallet Wallet (fees or credit) with a particular currency
      */
     public function GetWallet($fundsType, $currencyIso)
     {        

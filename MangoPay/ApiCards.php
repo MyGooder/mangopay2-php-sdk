@@ -9,7 +9,7 @@ class ApiCards extends Libraries\ApiBase
 {
     /**
      * Get card
-     * @param int $cardId Card identifier
+     * @param string $cardId Card identifier
      * @return \MangoPay\Card object returned from API
      */
     public function Get($cardId)
@@ -23,11 +23,12 @@ class ApiCards extends Libraries\ApiBase
      *
      * @param string $fingerprint The fingerprint hash
      * @param \MangoPay\Pagination $pagination Pagination object
-     * @return array List of Cards corresponding to provided fingerprint
+     * @param \MangoPay\Sorting $sorting Sorting object
+     * @return \MangoPay\Card[] List of Cards corresponding to provided fingerprint
      */
-    public function GetByFingerprint($fingerprint, $pagination = null)
+    public function GetByFingerprint($fingerprint, & $pagination = null, $sorting = null)
     {
-        return $this->GetList('cards_get_by_fingerprint', $pagination, '\MangoPay\Card', $fingerprint);
+        return $this->GetList('cards_get_by_fingerprint', $pagination, '\MangoPay\Card', $fingerprint, null, $sorting);
     }
 
     /**
@@ -46,20 +47,20 @@ class ApiCards extends Libraries\ApiBase
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\FilterPreAuthorizations filter Filtering object
      * @param \MangoPay\Sorting $sorting Sorting object
-     * @return array List of the Card's PreAuthorizations
+     * @return \MangoPay\CardPreAuthorization[] List of the Card's PreAuthorizations
      */
-
     public function GetPreAuthorizations($cardId, $pagination = null, $filter = null, $sorting = null)
     {
         return $this->GetList("preauthorizations_get_for_card", $pagination, '\MangoPay\CardPreAuthorization', $cardId, $filter, $sorting);
     }
 
     /**
-     * Retrives a list of Transactions pertaining to a certain Card
+     * Retrieves a list of Transactions pertaining to a certain Card
      * @param string $cardId Card identifier
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\FilterTransactions $filter Filtering object
      * @param \MangoPay\Sorting $sorting Sorting object
+     * @return \MangoPay\Transaction[]
      */
     public function GetTransactions($cardId, & $pagination = null, $filter = null, $sorting = null)
     {

@@ -9,13 +9,13 @@ class Transaction extends Libraries\EntityBase
 {
     /**
      * Author Id
-     * @var int
+     * @var string
      */
     public $AuthorId;
     
     /**
      * Credited user Id
-     * @var int
+     * @var string
      */
     public $CreditedUserId;
     
@@ -38,8 +38,8 @@ class Transaction extends Libraries\EntityBase
     public $Fees;
     
     /**
-     * TransactionStatus {CREATED, SUCCEEDED, FAILED}
      * @var string
+     * @see \MangoPay\TransactionStatus
      */
     public $Status;
     
@@ -56,32 +56,32 @@ class Transaction extends Libraries\EntityBase
     public $ResultMessage;
     
     /**
-     * Execution date;
-     * @var date
+     * Execution date
+     * @var int
      */
     public $ExecutionDate;
     
     /**
-     * TransactionType {PAYIN, PAYOUT, TRANSFER}
      * @var string
+     * @see \MangoPay\TransactionType
      */
     public $Type;
     
     /**
-     * TransactionNature { REGULAR, REFUND, REPUDIATION, SETTLEMENT }
      * @var string
+     * @see \MangoPay\TransactionNature
      */
     public $Nature;
     
     /**
      * Debited wallet Id
-     * @var int
+     * @var string
      */
     public $DebitedWalletId;
     
     /**
      * Credited wallet Id
-     * @var int  
+     * @var string  
      */
     public $CreditedWalletId;
     

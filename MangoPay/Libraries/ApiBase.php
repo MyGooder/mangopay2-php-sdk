@@ -26,7 +26,7 @@ abstract class ApiBase
      */
     private $_methods = array(
         'authentication_base' => array( '/clients/', RequestType::POST ),
-        'authentication_oauth' => array( '/oauth/token ', RequestType::POST ),
+        'authentication_oauth' => array( '/oauth/token', RequestType::POST ),
 
         'responses_get' => array( '/responses/%s', RequestType::GET),
 
@@ -61,6 +61,10 @@ abstract class ApiBase
         'payins_paypal-web_create' => array( '/payins/paypal/web', RequestType::POST ),
         'payins_get' => array( '/payins/%s', RequestType::GET ),
         'payins_createrefunds' => array( '/payins/%s/refunds', RequestType::POST ),
+
+        'repudiation_get' => array('/repudiations/%s', RequestType::GET),
+
+        'get_extended_card_view' => array( '/payins/card/web/%s/extended', RequestType::GET ),
 
         'payouts_bankwire_create' => array( '/payouts/bankwire/', RequestType::POST ),
         'payouts_get' => array( '/payouts/%s', RequestType::GET ),
@@ -211,7 +215,7 @@ abstract class ApiBase
      * @param string $methodKey Key with request data
      * @param object $entity Entity object
      * @param object $responseClassName Name of entity class from response
-     * @param int $entityId Entity identifier
+     * @param string $entityId Entity identifier
      * @return object Response data
      */
     protected function CreateObject($methodKey, $entity, $responseClassName = null, $entityId = null, $subEntityId = null, $idempotencyKey = null)
@@ -242,7 +246,7 @@ abstract class ApiBase
     /**
      * Get entity object from API
      * @param string $methodKey Key with request data
-     * @param int $entityId Entity identifier
+     * @param string $entityId Entity identifier
      * @param object $responseClassName Name of entity class from response
      * @param int $secondEntityId Entity identifier for second entity
      * @return object Response data
@@ -266,7 +270,7 @@ abstract class ApiBase
      * @param string $methodKey Key with request data
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param object $responseClassName Name of entity class from response
-     * @param int $entityId Entity identifier
+     * @param string $entityId Entity identifier
      * @param object $filter Object to filter data
      * @param \MangoPay\Sorting $sorting Object to sorting data
      * @return object[] Response data

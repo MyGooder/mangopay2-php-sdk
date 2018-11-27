@@ -13,7 +13,7 @@ class ApiDisputes extends Libraries\ApiBase
     
     /**
      * Gets dispute
-     * @param int|GUID $disputeId Dispute identifier
+     * @param string $disputeId Dispute identifier
      * @return \MangoPay\Dispute Dispute instance returned from API
      */
     public function Get($disputeId)
@@ -25,18 +25,19 @@ class ApiDisputes extends Libraries\ApiBase
      * Get all disputes
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
-     * @return array Array with disputes
+     * @param \MangoPay\FilterDisputes $filter Filtering object
+     * @return \MangoPay\Dispute[] Array with disputes
      */
-    public function GetAll(& $pagination = null, $sorting = null)
+    public function GetAll(& $pagination = null, $sorting = null, $filter = null)
     {
-        return $this->GetList('disputes_all', $pagination, '\MangoPay\Dispute', null, null, $sorting);
+        return $this->GetList('disputes_all', $pagination, '\MangoPay\Dispute', null, $filter, $sorting);
     }
     
      /**
      * List Disputes that need settling
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
-     * @return array Array with disputes
+     * @return \MangoPay\Dispute[] Array with disputes
      */
     public function GetPendingSettlements(& $pagination = null, $sorting = null)
     {
@@ -52,10 +53,10 @@ class ApiDisputes extends Libraries\ApiBase
     {
         return $this->SaveObject('disputes_save_tag', $dispute, '\MangoPay\Dispute');
     }
-    
+
     /**
      * Contests dispute
-     * @param int|GUID $disputeId Dispute identifier
+     * @param string $disputeId Dispute identifier
      * @param \MangoPay\Money $contestedFunds Contested funds
      * @return \MangoPay\Dispute Dispute instance returned from API
      */
@@ -66,10 +67,10 @@ class ApiDisputes extends Libraries\ApiBase
         $dispute->ContestedFunds = $contestedFunds;
         return $this->SaveObject('disputes_save_contest_funds', $dispute, '\MangoPay\Dispute');
     }
-    
+
     /**
-     * This method is used to resubmit a Dispute if it is reopened requiring more docs 
-     * @param int|GUID $disputeId Dispute identifier
+     * This method is used to resubmit a Dispute if it is reopened requiring more docs
+     * @param string $disputeId Dispute identifier
      * @return \MangoPay\Dispute Dispute instance returned from API
      */
     public function ResubmitDispute($disputeId)
@@ -81,7 +82,7 @@ class ApiDisputes extends Libraries\ApiBase
     
     /**
      * Close dispute
-     * @param int|GUID $disputeId Dispute identifier
+     * @param string $disputeId Dispute identifier
      * @return \MangoPay\Dispute Dispute instance returned from API
      */
     public function CloseDispute($disputeId)
@@ -90,46 +91,52 @@ class ApiDisputes extends Libraries\ApiBase
         $dispute->Id = $disputeId;
         return $this->SaveObject('dispute_save_close', $dispute, '\MangoPay\Dispute');
     }
-    
+
     /**
      * Gets dispute's transactions
-     * @param int|GUID $disputeId Dispute identifier
+     * @param string $disputeId Dispute identifier
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
-     * @return array List of Transaction instances returned from API
+     * @param \MangoPay\FilterTransactions $filter Filtering object
+     * @return \MangoPay\Transaction[] List of Transaction instances returned from API
+     * @throws Libraries\Exception
      */
-    public function GetTransactions($disputeId, $pagination = null, $sorting = null)
+    public function GetTransactions($disputeId, & $pagination = null, $sorting = null, $filter = null)
     {
-        return $this->GetList('disputes_get_transactions', $pagination, 'MangoPay\Transaction', $disputeId, null, $sorting);
+        return $this->GetList('disputes_get_transactions', $pagination, 'MangoPay\Transaction', $disputeId, $filter, $sorting);
     }
-    
+
     /**
      * Gets dispute's documents for wallet
-     * @param int|GUID $walletId Wallet identifier
+     * @param string $walletId Wallet identifier
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
-     * @return array List of dispute instances returned from API
+     * @param \MangoPay\FilterDisputes $filter Filtering object
+     * @return \MangoPay\Dispute[] List of dispute instances returned from API
+     * @throws Libraries\Exception
      */
-    public function GetDisputesForWallet($walletId, $pagination = null, $sorting = null)
+    public function GetDisputesForWallet($walletId, & $pagination = null, $sorting = null, $filter = null)
     {
-        return $this->GetList('disputes_get_for_wallet', $pagination, 'MangoPay\Dispute', $walletId, null, $sorting);
+        return $this->GetList('disputes_get_for_wallet', $pagination, 'MangoPay\Dispute', $walletId, $filter, $sorting);
     }
-    
+
     /**
      * Gets user's disputes
-     * @param int|GUID $userId User identifier
+     * @param string $userId User identifier
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
-     * @return array List of Dispute instances returned from API
+     * @param \MangoPay\FilterDisputes $filter Filtering object
+     * @return \MangoPay\Dispute[] List of Dispute instances returned from API
+     * @throws Libraries\Exception
      */
-    public function GetDisputesForUser($userId, $pagination = null, $sorting = null)
+    public function GetDisputesForUser($userId, & $pagination = null, $sorting = null, $filter = null)
     {
-        return $this->GetList('disputes_get_for_user', $pagination, 'MangoPay\Dispute', $userId, null, $sorting);
+        return $this->GetList('disputes_get_for_user', $pagination, 'MangoPay\Dispute', $userId, $filter, $sorting);
     }
     
     /**
      * Gets repudiation
-     * @param int|GUID $repudiationId Repudiation identifier
+     * @param string $repudiationId Repudiation identifier
      * @return \MangoPay\Repudiation Repudiation instance returned from API
      */
     public function GetRepudiation($repudiationId)
@@ -140,7 +147,7 @@ class ApiDisputes extends Libraries\ApiBase
     /**
      * Creates settlement transfer
      * @param \MangoPay\SettlementTransfer $settlementTransfer Settlement transfer
-     * @param int|GUID $repudiationId Repudiation identifier
+     * @param string $repudiationId Repudiation identifier
      * @return \MangoPay\Transfer Transfer instance returned from API
      */
     public function CreateSettlementTransfer($settlementTransfer, $repudiationId, $idempotencyKey = null)
@@ -150,29 +157,31 @@ class ApiDisputes extends Libraries\ApiBase
     
     /**
      * Gets settlement transfer
-     * @param int|GUID $settlementTransferId Settlement transfer identifier
-     * @return \MangoPay\Transfer Transfer instance returned from API
+     * @param string $settlementTransferId Settlement transfer identifier
+     * @return \MangoPay\SettlementTransfer Transfer instance returned from API
      */
     public function GetSettlementTransfer($settlementTransferId)
     {
         return $this->GetObject('disputes_repudiation_get_settlement', $settlementTransferId, '\MangoPay\SettlementTransfer');
     }
-   
+
     /**
      * Gets documents for dispute
-     * @param int|GUID $disputeId Dispute identifier
+     * @param string $disputeId Dispute identifier
      * @param \MangoPay\Pagination $pagination Pagination object
      * @param \MangoPay\Sorting $sorting Object to sorting data
-     * @return array List of DisputeDocument instances returned from API
+     * @param \MangoPay\FilterDisputeDocuments $filter Filtering object
+     * @return \MangoPay\DisputeDocument[] List of DisputeDocument instances returned from API
+     * @throws Libraries\Exception
      */
-    public function GetDocumentsForDispute($disputeId, $pagination = null, $sorting = null)
+    public function GetDocumentsForDispute($disputeId, & $pagination = null, $sorting = null, $filter = null)
     {
-        return $this->GetList('disputes_document_get_for_dispute', $pagination, 'MangoPay\DisputeDocument', $disputeId, null, $sorting);
+        return $this->GetList('disputes_document_get_for_dispute', $pagination, 'MangoPay\DisputeDocument', $disputeId, $filter, $sorting);
     }
         
     /**
      * Update dispute document
-     * @param int|GUID $disputeId Dispute identifier
+     * @param string $disputeId Dispute identifier
      * @param \MangoPay\DisputeDocument $disputeDocument Dispute document to save
      * @return \MangoPay\DisputeDocument Document returned from API
      */
@@ -183,7 +192,7 @@ class ApiDisputes extends Libraries\ApiBase
         
     /**
      * Creates document for dispute
-     * @param int|GUID $disputeId Dispute identifier
+     * @param string $disputeId Dispute identifier
      * @param \MangoPay\DisputeDocument $disputeDocument Dispute document to be created
      * @return \MangoPay\DisputeDocument Dispute document returned from API
      */
@@ -194,8 +203,8 @@ class ApiDisputes extends Libraries\ApiBase
     
     /**
      * Creates document's page for dispute
-     * @param int|GUID $disputeId Dispute identifier
-     * @param int|GUID $disputeDocumentId Dispute document identifier
+     * @param string $disputeId Dispute identifier
+     * @param string $disputeDocumentId Dispute document identifier
      * @param \MangoPay\DisputeDocumentPage $disputeDocumentPage Dispute document page object
      */
     public function CreateDisputeDocumentPage($disputeId, $disputeDocumentId, $disputeDocumentPage, $idempotencyKey = null)
@@ -211,8 +220,8 @@ class ApiDisputes extends Libraries\ApiBase
     
     /**
      * Creates document's page for dispute from file
-     * @param int|GUID $disputeId Dispute identifier
-     * @param int|GUID $disputeDocumentId Dispute document identifier
+     * @param string $disputeId Dispute identifier
+     * @param string $disputeDocumentId Dispute document identifier
      * @param string $file File path
      * @throws \MangoPay\Libraries\Exception
      */

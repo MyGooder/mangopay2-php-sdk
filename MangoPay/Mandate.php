@@ -1,4 +1,5 @@
 <?php
+
 namespace MangoPay;
 
 /**
@@ -50,8 +51,9 @@ class Mandate extends Libraries\EntityBase
     public $UserId;
 
     /**
-     * Status of the mandate: CREATED, SUBMITTED, ACTIVE, FAILED
+     * Status of the mandate
      * @var string
+     * @see \MangoPay\MandateStatus
      */
     public $Status;
 
